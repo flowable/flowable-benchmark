@@ -140,9 +140,9 @@ public class BenchmarkService implements CommandLineRunner, ApplicationContextAw
         processEngine.getProcessEngineConfiguration().getAsyncExecutor().shutdown();
         processEngine.getManagementService()
             .executeCommand(commandContext -> {
-                SchemaManager schemaManager = CommandContextUtil.getProcessEngineConfiguration(commandContext)
-                    .getSchemaManager();
-                schemaManager.schemaDrop();
+                org.flowable.eventregistry.impl.util.CommandContextUtil.getEventRegistryConfiguration(commandContext)
+                    .getSchemaManager()
+                    .schemaDrop();
                 return null;
             });
 
@@ -151,6 +151,14 @@ public class BenchmarkService implements CommandLineRunner, ApplicationContextAw
                 SchemaManager schemaManager = CommandContextUtil.getProcessEngineConfiguration(commandContext)
                     .getSchemaManager();
                 schemaManager.schemaCreate();
+
+                org.flowable.idm.engine.impl.util.CommandContextUtil.getIdmEngineConfiguration(commandContext)
+                    .getSchemaManager()
+                    .schemaCreate();
+
+                org.flowable.eventregistry.impl.util.CommandContextUtil.getEventRegistryConfiguration(commandContext)
+                    .getSchemaManager()
+                    .schemaCreate();
                 return null;
             });
         processEngine.getProcessEngineConfiguration().getAsyncExecutor().start();
